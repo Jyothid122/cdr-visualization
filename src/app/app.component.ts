@@ -1,4 +1,3 @@
-// app.component.ts
 
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 
@@ -24,8 +23,8 @@ export class AppComponent implements AfterViewInit {
       startTime: new Date('2024-05-08T10:00:00'),
       endTime: new Date('2024-05-08T10:15:00'),
       duration: 900,
-      callerLocation: { lat: 40.785091, lng: -73.968285 }, // Party A's location (Uptown)
-      recipientLocation: { lat: 40.758896, lng: -73.985130 } // Party B's location (Midtown)
+      callerLocation: { lat: 40.785091, lng: -73.968285 }, 
+      recipientLocation: { lat: 40.758896, lng: -73.985130 } 
     }
    
   ];
@@ -71,7 +70,6 @@ export class AppComponent implements AfterViewInit {
       
       this.bounds.extend(position);
       
-      // Add an info window to show the name, area, and activity of the party when the marker is clicked
       const infoWindow = new google.maps.InfoWindow({
         content: `<strong>${location.name}</strong><br>Area: ${location.area}<br>Activity: ${location.activity}`
       });
@@ -81,25 +79,21 @@ export class AppComponent implements AfterViewInit {
       });
     });
 
-    // Draw polylines to represent relationships between parties based on CDR data
     this.drawRelationships();
     
-    // Center map at the midpoint of all marker positions
     this.map.setCenter(this.bounds.getCenter());
     
-    // Adjust zoom level to ensure all markers are visible
     this.map.fitBounds(this.bounds);
   }
 
   drawRelationships() {
     console.log('Drawing relationships...');
   
-    this.filteredCDRs.forEach(cdr => { // Iterate over filtered CDRs
+    this.filteredCDRs.forEach(cdr => { 
       console.log('Drawing polyline for CDR:', cdr);
       const callerPosition = new google.maps.LatLng(cdr.callerLocation.lat, cdr.callerLocation.lng);
       const recipientPosition = new google.maps.LatLng(cdr.recipientLocation.lat, cdr.recipientLocation.lng);
   
-      // Create polyline between caller and recipient with red color
       const polyline = new google.maps.Polyline({
         path: [callerPosition, recipientPosition],
         geodesic: true,
@@ -113,39 +107,32 @@ export class AppComponent implements AfterViewInit {
   }
   
   onDateRangeChange(selectedDateRange: Date[]) {
-    // Retrieve selected start and end dates
     const startDate = selectedDateRange[0];
     const endDate = selectedDateRange[1];
 
-    // Filter CDRs based on the selected time range
     this.filteredCDRs = this.cdrs.filter(cdr => {
       const cdrStartTime = new Date(cdr.startTime);
       return cdrStartTime >= startDate && cdrStartTime <= endDate;
     });
 
-    // Update map display with filtered CDRs
     this.updateMap();
   }
   updateMap() {
-    // Clear existing markers and polylines from the map
     this.clearMap();
 
-    // Redraw markers and polylines for filtered CDRs
     this.drawMarkers();
     if (this.sliderAdjusted) {
       this.drawRelationships();
     }
   }
   clearMap() {
-    // Clear existing markers
     this.filteredCDRs.forEach(cdr => {
       if (cdr.marker) {
-        cdr.marker.setMap(null); // Remove marker from the map
+        cdr.marker.setMap(null); 
       }
     });
   }
     drawMarkers() {
-      // Initialize bounds for fitting markers on the map
       this.bounds = new google.maps.LatLngBounds();
     
       // Draw markers for filtered CDRs
@@ -157,28 +144,22 @@ export class AppComponent implements AfterViewInit {
           position: position,
           map: this.map,
           title: cdr.caller,
-          icon: 'path/to/marker-icon.png' // Customize marker icon as needed
+          icon: 'path/to/marker-icon.png' 
         });
     
-        // Store marker reference in CDR object
         cdr.marker = marker;
     
-        // Extend bounds to include marker position
         this.bounds.extend(position);
       });
     
-      // Fit map bounds to show all markers
       this.map.fitBounds(this.bounds);
     }  
 
     onSliderChange(value: number) {
-      // Handle slider change here
       console.log('Slider value:', value);
     
-      // Set sliderAdjusted to true
       this.sliderAdjusted = true;
     
-      // Filter CDRs based on the selected time range
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - value);
       this.filteredCDRs = this.cdrs.filter(cdr => {
@@ -186,11 +167,11 @@ export class AppComponent implements AfterViewInit {
         return cdrStartTime >= startDate;
       });
     
-      console.log('Filtered CDRs:', this.filteredCDRs); // Log filtered CDRs
+      console.log('Filtered CDRs:', this.filteredCDRs);
     
       // Update map display with filtered CDRs
       this.updateMap();  
-      this.map.setZoom(15 - value / 10); // Example: Adjust zoom level based on slider value
+      this.map.setZoom(15 - value / 10); 
       this.showCDRInfo();
 
     }
@@ -201,7 +182,6 @@ export class AppComponent implements AfterViewInit {
         console.log('Location:', cdr.callerLocation);
         console.log('Start Time:', cdr.startTime);
         console.log('End Time:', cdr.endTime);
-        // You can display this information in the UI as well if needed
       });
     
   }
