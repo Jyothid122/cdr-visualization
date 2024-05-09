@@ -1,0 +1,24 @@
+#map {
+    height: 500px;
+    width: 50%;
+   }
+
+   .info-containe {
+    width: 50%;
+    padding: 20px;
+    margin-top: 40px;
+}
+  
+  .cdr-container {
+    width: 30%; /* Set a fixed width for the CDR information container */
+    margin-left: 20px; /* Add some space between the map and the CDR container */
+    margin-left:700px;
+    margin-top:-500px
+  }
+  .info-container {
+    margin-top: 30px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
